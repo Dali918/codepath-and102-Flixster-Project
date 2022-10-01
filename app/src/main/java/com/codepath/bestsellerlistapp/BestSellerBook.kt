@@ -21,9 +21,17 @@ class BestSellerBook {
     var author: String? = null
 
     //TODO bookImageUrl
+    @JvmField
+    @SerializedName("bookImageUrl")
+    var bookImageUrl: String? = null
 
+    //Create a String? variable called bookImageUrl that will match the correct JSON key.
+    // Create a String? variable called description that will match the correct JSON key.
 
     //TODO description
+    @JvmField
+    @SerializedName("description")
+    var description: String? = null
 
 
     //TODO-STRETCH-GOALS amazonUrl

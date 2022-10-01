@@ -1,6 +1,7 @@
 package com.codepath.bestsellerlistapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,20 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codepath.asynchttpclient.AsyncHttpClient
+import com.codepath.asynchttpclient.RequestParams
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import com.codepath.asynchttpclient.callback.TextHttpResponseHandler
 import com.codepath.bestsellerlistapp.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import okhttp3.Headers
+import org.json.JSONObject
 
 // --------------------------------//
 // CHANGE THIS TO BE YOUR API KEY  //
 // --------------------------------//
-private const val API_KEY = "<YOUR-API-KEY-HERE>"
+private const val API_KEY = "QZAYhqsC1kgOlONSH220Ygc775pRnYch"
 
 /*
  * The class for the only fragment in the app, which contains the progress bar,
@@ -46,11 +55,20 @@ class BestSellerBooksFragment : Fragment(), OnListFragmentInteractionListener {
         progressBar.show()
 
         // Create and set up an AsyncHTTPClient() here
+        val client = AsyncHttpClient()
+        val params = RequestParams()
+        params["api-key"]=API_KEY
 
         // Using the client, perform the HTTP request
+        client[
+                "https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json",
+                params,
+                object : JsonHttpResponseHandler()
+                { //connect these callbacks to your API call
 
-        /* Uncomment me once you complete the above sections!
-        {
+                    //... etc
+
+
             /*
              * The onSuccess function gets called when
              * HTTP response status is "200 OK"
@@ -65,11 +83,27 @@ class BestSellerBooksFragment : Fragment(), OnListFragmentInteractionListener {
 
                 //TODO - Parse JSON into Models
 
-                val models : List<BestSellerBook> = null // Fix me!
-                recyclerView.adapter = BestSellerBooksRecyclerViewAdapter(models, this@BestSellerBooksFragment)
+//                var model : List<BestSellerBook> = mutableListOf(BestSellerBook()) // Fix me!
+
 
                 // Look for this in Logcat:
                 Log.d("BestSellerBooksFragment", "response successful")
+                Log.d("entire messaege",json.toString())
+                //get the JSON result as a JSON object
+                val resultsJSON : JSONObject = json.jsonObject.get("results") as JSONObject
+                //get the books as strings
+                val booksRawJSON : String = resultsJSON.get("books").toString()
+                Log.d("books",booksRawJSON)
+                //create a Gson object
+                val gson = Gson()
+                // make array of books
+                val arrayBookType = object : TypeToken<List<BestSellerBook>>() {}.type
+                //transform book strings to book list
+                val model:List<BestSellerBook> = gson.fromJson(booksRawJSON,arrayBookType)
+                //update the recycler view
+                recyclerView.adapter = BestSellerBooksRecyclerViewAdapter(model, this@BestSellerBooksFragment)
+
+
             }
 
             /*
@@ -91,7 +125,7 @@ class BestSellerBooksFragment : Fragment(), OnListFragmentInteractionListener {
                 }
             }
         }]
-        */
+
 
     }
 
