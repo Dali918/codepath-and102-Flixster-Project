@@ -43,8 +43,10 @@ GIF created with ...
 
 Describe any challenges encountered while building the app.
 
-- I had trouble using the API key that was provided to me by CodePath and I had to sign up for an account with MovieDB to access my own API key
-- Using the Glide Module required some troubleshooting whihc involved doing some extra resesarch on how to use newer glide modules
+- I had trouble using the API key that was initially provided to me by CodePath but I utilized the developer portal to access my own API key
+- Using the Glide Module required updating dependencies in the 'gradle.properties' file following initial Glide Module errors
+- Although designing Android layout files using the GUI is easier, editing the XML file directly was more efficient following research on XML layout in android
+- Serializing JSON data was a challenge especially extracting the right data for the data model class intialization. I especially spent most of my time fixing type conversion semantic errors but I learned a lot about how JSON files are processed follow an HTTP request and parsed into specific data fields. 
 
 ## License
 
